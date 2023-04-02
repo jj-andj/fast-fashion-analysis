@@ -1,0 +1,66 @@
+---
+title: "Fast Fashion's Production Rate is Observedly Unsustainable: Why and How did we get here?"
+author: "Jayden Jung"
+thanks: "Code and data are available at: https://github.com/jj-andj/fast-fashion-analysis"
+date: "April 21, 2023"
+date-format: long
+format: 
+  pdf: 
+    documentclass: article
+    geometry: margin = 1in
+    abstract: "An abstract is included and appropriately pitched to a non-specialist audience. The abstract answers: 1) what was done, 2) what was found, and 3) why this matters (all at a high level). Likely four sentences. Abstract must make clear what we learn about the world because of this paper."
+output: 
+  bookdown::pdf_document2
+toc: false
+fig_caption: yes
+nocite: '@*'
+bibliography: references.bib
+---
+
+# Introduction
+
+> "Fast fashion isn't free. Someone, somewhere is paying."
+>
+> --- Lucy Siegle, Journalist and Producer of *The True Cost*, 2015.
+
+1\) broader context to motivate; 2) some detail about what the paper is about; 3) a clear gap that needs to be filled; 4) what was done; 5) what was found; 6) why it is important; 7) the structure of the paper. A reader should be able to read only the introduction and know what was done, why, and what was found.
+
+Estimand
+
+# Data
+
+Lorem
+
+# Results
+
+Lorem
+
+# Discussion
+
+## Findings
+
+Lorem
+
+## Why did we get here? Exploring culture-based roots of Fast Fashion
+
+Lorem
+
+## At what cost? Reviewing the ramifications of Fast Fashion
+
+Lorem
+
+## Defining Solution Spaces
+
+Lorem
+
+## Future Research
+
+Lorem
+
+## Limitations
+
+Lorem
+
+\clearpage
+
+# References {.unnumbered}

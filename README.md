@@ -1,6 +1,6 @@
 # Analysis of Fast Fashion Production Rates, Causes, Ramifications, and Possible Solutions
 
-This repo contains the code (`R`), data (`CSV`), and final `PDF` document for "Fast Fashion's Production Rate is Observedly Unsustainable: Why and How did we get here?", a project and paper that analyzes data on practically observable overproduction at fast fashion companies alongside litearture on the topic. 
+This repo contains the code (`R`), data (`CSV`), and final `PDF` document for "Fast Fashion's Rapid Rate of Overoduction is Observedly Unsustainable, & Unethical: Why and How did we get here?", a project and paper that analyzes data on practically observable overproduction at fast fashion companies alongside litearture on the topic. 
 
 The data for this paper was collected through web-scraping of the given companies' online storefront websites. 
 

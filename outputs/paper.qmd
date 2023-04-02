@@ -1,5 +1,5 @@
 ---
-title: "Fast Fashion's Production Rate is Observedly Unsustainable: Why and How did we get here?"
+title: "Fast Fashion's Rapid Rate of Overoduction is Observedly Unsustainable, & Unethical: Why and How did we get here?"
 author: "Jayden Jung"
 thanks: "Code and data are available at: https://github.com/jj-andj/fast-fashion-analysis"
 date: "April 21, 2023"

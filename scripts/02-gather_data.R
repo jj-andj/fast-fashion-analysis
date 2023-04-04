@@ -6,7 +6,6 @@
 # Prerequisites: Use Web Scraper chrome extension for scraping KOTN data
 
 # Set up
-library(xml2)
 library(rvest)   
 library(tidyverse)
 library(dplyr)
@@ -43,14 +42,14 @@ for(page_result in seq(from = 1, to = 122, by = 1)) {
 }
 
 #Write csv of product list
-write_csv(z_products, "inputs/zafulapril2.csv")
+write_csv(z_products, "inputs/data/zafulapril2.csv")
 
 ## Second date
 #Create empty data frame
 z_products2 <- data.frame()
 
 #Loop through all product pages (sequence max set by what is seen on site) 
-for(page_result in seq(from = 1, to = 122, by = 1)) {
+for(page_result in seq(from = 1, to = 123, by = 1)) {
   url = paste0("https://www.zaful.com/clothes-e_1/g_", 
                page_result, ".html")
   raw_page <- GET(url, add_headers(headers))
@@ -67,4 +66,4 @@ for(page_result in seq(from = 1, to = 122, by = 1)) {
 }
 
 #Write csv of product list
-write_csv(z_products2, "inputs/zafulaprilXX.csv")
+write_csv(z_products2, "inputs/data/zafulapril4.csv")

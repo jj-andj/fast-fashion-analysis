@@ -1,5 +1,5 @@
 ---
-title: "Fast Fashion's Rapid Rate of Overoduction is Observedly Unsustainable, & Unethical: Why and How did we get here?"
+title: "Fast Fashion's Rapid Rate of Overproduction is Observedly Unsustainable & Unethical: Why and How did we get here?"
 author: "Jayden Jung"
 thanks: "Code and data are available at: https://github.com/jj-andj/fast-fashion-analysis"
 date: "April 21, 2023"
@@ -8,7 +8,7 @@ format:
   pdf: 
     documentclass: article
     geometry: margin = 1in
-    abstract: "An abstract is included and appropriately pitched to a non-specialist audience. The abstract answers: 1) what was done, 2) what was found, and 3) why this matters (all at a high level). Likely four sentences. Abstract must make clear what we learn about the world because of this paper."
+    abstract: "Fast fashion is extremely profitable, accessible, and convienient, and equally -- if not more -- unethical and unsustainable. To illustrates the severity of fast fashion companies' rate of overproduction, this paper scrapes a representative company's online inventory at multiple points in time and finds that old products are being retired and new products added at unbelievably fast rates: too fast to be ethically possible. Secondary research explores this industry's cultural origins and catalysts and its serious negative ethical and environment consequences. Possible solutions are discussed, and the paper concludes on calling for urgent awareness and action to combat fast fashion."
 output: 
   bookdown::pdf_document2
 toc: false
@@ -23,17 +23,61 @@ bibliography: references.bib
 >
 > --- Lucy Siegle, Journalist and Producer of *The True Cost*, 2015.
 
-1\) broader context to motivate; 2) some detail about what the paper is about; 3) a clear gap that needs to be filled; 4) what was done; 5) what was found; 6) why it is important; 7) the structure of the paper. A reader should be able to read only the introduction and know what was done, why, and what was found.
+Fast fashion is the design, production, and selling of clothing in a very rapid and high volume approach. Companies participating in this practice churn out countless new, trendy products faster than ever at unbelievably cheap prices and even lower costs, reaping profit margins in the hundreds of millions and even billions. Customers are happy, finding it an accessible and affordable way to dress well and constantly update their closets. This situation may appear too good to be true: this is because it is.
 
-Estimand
+As Lucy Siegle's quote suggests, fast fashion does come at a cost, though it may not be obvious. It is made possible only by riding on the backs of unethical labor conditions and catastrophically negative effects on the environment. Despite these truths, many continue to support and buy from fast fashion companies, often as they do not grasp the true severity of these issues or that they feel it is not something that can be challenged.
+
+This paper delves into a case study of the fast fashion company ZAFUL. The population I hope to generalize the results to in this case is all fashion/apparel-focused companies that would be considered to be participating in fast-fashion. The estimand that I aim to approach is these companies' rate of producing new products and retiring old products. By documenting all available products in one of ZAFUL's given categories through web scraping and comparing the data collected on different dates over time, we see first-hand the unbelievably fast rate of production and turnover. The extremity of these results are further emphasized when compared to the product retention rate of a sustainable fashion company, KOTN.
+
+The paper then draws on secondary literature to convey how the illustrated severity of fast fashion companies' rapidness in production is inherently unethical and unsustainable, specifically by showcasing the negative consequences that are necessary to achieve those results. Consideration of the cultural origins and catalysts of the fast fashion industry are also provided. Then, discussion of possible solution spaces to these problems are explored, generally suggesting that fast fashion itself should be fought against.
+
+Fast fashion and its ramifications are not as widely understood as it must be for us to societally move away from it. It is this paper's intention to shine light on this topic and call for urgent awareness and action.
+
+The gathering of the data used for this paper was done by web scraping through the statistical programming language R @citeR and the Chrome extension Web Scraper @citeWS which were conducted on the sites zaful.com and kotn.com. Further... (package citations).
 
 # Data
 
-Lorem
+```{r}
+#| echo: false
+#| include: false
+# talk about data collection process and category (women's clothing only)
+# web scraper chrome extension for kotn (dynamic webpage)
+# looping through pagination for zaful 
+# head of both stores
+# summarize total number of products seen before and after for two stores 
+```
 
 # Results
 
-Lorem
+```{r}
+#| echo: false
+#| include: false
+# semi_join(before, after) to see what is the same
+# use anti_join(before, after) to see what has been removed
+# anti_join(after, before) to see what has been added
+# make a table with those 3 values 
+# make pi-chart with values proportionate to total number of products
+# make point/line graph showing increase of new products and decrease of old products
+# bar graph showing how much changed in store 1 vs store 2
+
+#z_products <- read_csv(here::here("inputs/data/zafulapril2.csv"), show_col_types = FALSE)
+
+#z_products2 <- read_csv(here::here("inputs/data/zafulapril4.csv"), show_col_types = FALSE)
+
+
+#k_products <- read_csv(here::here("inputs/data/kotnapril2.csv"), show_col_types = FALSE)
+
+#k_products2 <- read_csv(here::here("inputs/data/kotnapril4.csv"), show_col_types = FALSE)
+
+#samek <- semi_join(k_products, k_products2)
+#removedk <- anti_join(k_products, k_products2)
+#addedk <- anti_join(k_products2, k_products)
+
+#samez <- semi_join(z_products, z_products2)
+#removedz <- anti_join(z_products, z_products2)
+#addedz <- anti_join(z_products2, z_products)
+
+```
 
 # Discussion
 

@@ -46,8 +46,8 @@ store2date1
 store2date2
 
 # Download simulated data
-write_csv(store1date1, "inputs/0-simulation/store1date1.csv")
-write_csv(store1date2, "inputs/0-simulation/store1date2.csv")
+write_csv(store1date1, "inputs/simulation/store1date1.csv")
+write_csv(store1date2, "inputs/simulation/store1date2.csv")
 
-write_csv(store2date1, "inputs/0-simulation/store2date1.csv")
-write_csv(store2date2, "inputs/0-simulation/store2date2.csv")
+write_csv(store2date1, "inputs/simulation/store2date1.csv")
+write_csv(store2date2, "inputs/simulation/store2date2.csv")

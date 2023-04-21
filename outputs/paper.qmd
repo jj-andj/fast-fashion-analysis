@@ -27,56 +27,268 @@ Fast fashion is the design, production, and selling of clothing in a very rapid 
 
 As Lucy Siegle's quote suggests, fast fashion does come at a cost, though it may not be obvious. It is made possible only by riding on the backs of unethical labor conditions and catastrophically negative effects on the environment. Despite these truths, many continue to support and buy from fast fashion companies, often as they do not grasp the true severity of these issues or that they feel it is not something that can be challenged.
 
-This paper delves into a case study of the fast fashion company ZAFUL. The population I hope to generalize the results to in this case is all fashion/apparel-focused companies that would be considered to be participating in fast-fashion. The estimand that I aim to approach is these companies' rate of producing new products and retiring old products. By documenting all available products in one of ZAFUL's given categories through web scraping and comparing the data collected on different dates over time, we see first-hand the unbelievably fast rate of production and turnover. The extremity of these results are further emphasized when compared to the product retention rate of a sustainable fashion company, KOTN.
+This paper delves into a case study of the fast fashion company ZAFUL. By documenting all available products in one of ZAFUL's given categories through web scraping and comparing the data collected on different dates over time, we see first-hand the unbelievably fast rate of production and turnover. The extremity of these results are further emphasized when compared to the product retention rate of a sustainable fashion company, KOTN.
 
 The paper then draws on secondary literature to convey how the illustrated severity of fast fashion companies' rapidness in production is inherently unethical and unsustainable, specifically by showcasing the negative consequences that are necessary to achieve those results. Consideration of the cultural origins and catalysts of the fast fashion industry are also provided. Then, discussion of possible solution spaces to these problems are explored, generally suggesting that fast fashion itself should be fought against.
 
 Fast fashion and its ramifications are not as widely understood as it must be for us to societally move away from it. It is this paper's intention to shine light on this topic and call for urgent awareness and action.
 
-The gathering of the data used for this paper was done by web scraping through the statistical programming language R @citeR and the Chrome extension Web Scraper @citeWS which were conducted on the sites zaful.com and kotn.com. Further... (package citations).
+The gathering of the data used for this paper was done by web scraping through the statistical programming language `R` [@citeR], the packages `rvest` [@citeVest], `httr` [@citeHTTR], and the Chrome extension *Web Scraper* [@citeWS] which were conducted on the sites zaful.com and kotn.com. Gathering, cleaning, and further analysis was also supported by packages `tidyverse` [@citeTidy], `dplyr` [@citeDplyr], `knitr` [@citeKnit], `kableExtra` [@citeKable], and `RColorBrewer` [@citeRColor].
 
 # Data
 
+talk about data collection process and category (women's clothing only)
+
+web scraper chrome extension for kotn (dynamic webpage)
+
+for looping through pagination for zaful
+
+only property we are using is product name
+
+differences/sameness were found by the exact product name so even the difference in colour or size mean they are diff products (this is a lil unfortunate)
+
+summarize total number of products seen before and after for two stores (table woahh)
+
 ```{r}
+#| label: set-up
 #| echo: false
-#| include: false
-# talk about data collection process and category (women's clothing only)
-# web scraper chrome extension for kotn (dynamic webpage)
-# looping through pagination for zaful 
-# head of both stores
-# summarize total number of products seen before and after for two stores 
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(RColorBrewer)
+
+#Read in data
+z_products <- read_csv(here::here("inputs/data/zafulapril2.csv"), show_col_types = FALSE)
+z_products <- z_products[!duplicated(z_products$products),]
+
+z_products2 <- read_csv(here::here("inputs/data/zafulapril4.csv"), show_col_types = FALSE)
+z_products2 <- z_products2[!duplicated(z_products2$products),]
+
+z_products3 <- read_csv(here::here("inputs/data/zafulapril10.csv"), show_col_types = FALSE)
+z_products3 <- z_products3[!duplicated(z_products3$products),]
+
+k_products <- read_csv(here::here("inputs/data/kotnapril2.csv"), show_col_types = FALSE)
+k_products <- k_products[!duplicated(k_products$products),]
+
+k_products2 <- read_csv(here::here("inputs/data/kotnapril4.csv"), show_col_types = FALSE)
+k_products2 <- k_products2[!duplicated(k_products2$products),]
+
+k_products3 <- read_csv(here::here("inputs/data/kotnapril10.csv"), show_col_types = FALSE)
+k_products3 <- k_products3[!duplicated(k_products3$products),]
+
+```
+
+```{r}
+#| label: tbl-data
+#| tbl-cap: "Total number of Women's Clothing products by store by date"
+#| echo: false
+#| message: false
+#| warning: false
+
+# create data frame of all total products by date by store
+totals <- data.frame(
+  store = c("ZAFUL (Fast Fashion)", "KOTN (Sustainable)"),
+  apr2 = c(nrow(z_products), nrow(k_products)),
+  apr4 = c(nrow(z_products2), nrow(k_products2)),
+  apr10 = c(nrow(z_products3), nrow(k_products3))
+)
+
+# create table displaying data by the dates & store
+totals %>% 
+  knitr::kable(booktabs = T, linesep = "\\addlinespace", col.names = c("Store", "April 2", "April 4", "April 10")) %>% 
+  column_spec(1, bold = T) %>% 
+  kable_styling(latex_options = "HOLD_position")%>% 
+  kable_styling(latex_options = "striped")
+
+```
+
+```{r}
+#| label: fig-data
+#| fig-cap: "ZAFUL holds much more products overall than KOTN"
+#| echo: false
+#| message: false
+#| warning: false
+
+# create data frame of all information by date and store
+totals2 <- data.frame(
+  store = c(rep("ZAFUL (Fast Fashion)", times = 3), 
+            rep("KOTN (Sustainable)", times = 3)),
+  date = c(rep(c("April 2", "April 4", "April 10"), times = 2)),
+  products = c(nrow(z_products), nrow(z_products2), nrow(z_products3),
+               nrow(k_products), nrow(k_products2), nrow(k_products3))
+)
+
+# rename columns and values
+date = c("April 2", "April 4", "April 10")
+totals2$date <- factor(totals2$date, levels = date)
+
+# create graph of data 
+totals2 %>% 
+  ggplot(aes(x = date, y = products, fill = store)) +
+  geom_col(position = "dodge") + 
+  theme_minimal() +
+  labs(x = "Date", y = "Products", fill = "Store") + 
+  theme(text=element_text(size=11, family="serif")) + 
+  scale_fill_brewer(palette = "Set1")
+
 ```
 
 # Results
 
 ```{r}
+#| label: tbl-summary
+#| tbl-cap: "Breakdown of added and deprecated products by date shows severity of ZAFUL's rate of production"
 #| echo: false
-#| include: false
-# semi_join(before, after) to see what is the same
-# use anti_join(before, after) to see what has been removed
-# anti_join(after, before) to see what has been added
-# make a table with those 3 values 
-# make pi-chart with values proportionate to total number of products
-# make point/line graph showing increase of new products and decrease of old products
-# bar graph showing how much changed in store 1 vs store 2
+#| message: false
+#| warning: false
 
-#z_products <- read_csv(here::here("inputs/data/zafulapril2.csv"), show_col_types = FALSE)
+# Creating subsets of what products are same, added, and removed 
+## KOTN Apr 2 -> Apr 4
+k_same <- subset(k_products2, (products %in% k_products$products))
+k_added <- subset(k_products2, !(products %in% k_products$products))
+k_removed <- subset(k_products, !(products %in% k_products2$products))
 
-#z_products2 <- read_csv(here::here("inputs/data/zafulapril4.csv"), show_col_types = FALSE)
+## KOTN Apr 2 -> Apr 10
+k_same2 <- subset(k_products3, (products %in% k_products$products))
+k_added2 <- subset(k_products3, !(products %in% k_products$products))
+k_added2_1 <- subset(k_products3, !(products %in% k_products2$products))
+k_removed2 <- subset(k_products, !(products %in% k_products3$products))
+k_removed2_1 <- subset(k_products2, !(products %in% k_products3$products))
 
+## ZAFUL Apr 2 -> Apr 4
+z_same <- subset(z_products2, (products %in% z_products$products))
+z_added <- subset(z_products2, !(products %in% z_products$products))
+z_removed <- subset(z_products, !(products %in% z_products2$products))
 
-#k_products <- read_csv(here::here("inputs/data/kotnapril2.csv"), show_col_types = FALSE)
+## ZAFUL Apr 2 -> Apr 10
+z_same2 <- subset(z_products3, (products %in% z_products$products))
+z_added2 <- subset(z_products3, !(products %in% z_products$products))
+z_added2_1 <- subset(z_products3, !(products %in% z_products2$products))
+z_removed2 <- subset(z_products, !(products %in% z_products3$products))
+z_removed2_1 <- subset(z_products2, !(products %in% z_products3$products))
 
-#k_products2 <- read_csv(here::here("inputs/data/kotnapril4.csv"), show_col_types = FALSE)
+#create columns for data frame 
+stores <- c("ZAFUL", "", "", "", "", "KOTN", "", "", "", "")
+statuses <- c("Total", 
+             "Added from April 2", 
+             "Deprecated from April 2", 
+             "Added from April 4", 
+             "Deprecated from April 4", 
+             "Total", 
+             "Added from April 2", 
+             "Deprecated from April 2", 
+             "Added from April 4", 
+             "Deprecated from April 4")
+april2 <- c(nrow(z_products),
+           '',
+           '',
+           '',
+           '',
+           nrow(k_products),
+           '',
+           '',
+           '',
+           '')
+april4 <- c(nrow(z_products2),
+           nrow(z_added),
+           nrow(z_removed),
+           '',
+           '',
+           nrow(k_products2),
+           nrow(k_added),
+           nrow(k_removed),
+           '',
+           '')
+april10 <- c(nrow(z_products3),
+           nrow(z_added2),
+           nrow(z_removed2),
+           nrow(z_added2_1),
+           nrow(z_removed2_1),
+           nrow(k_products3),
+           nrow(k_added2),
+           nrow(k_removed2),
+           nrow(k_added2_1),
+           nrow(k_removed2_1))
 
-#samek <- semi_join(k_products, k_products2)
-#removedk <- anti_join(k_products, k_products2)
-#addedk <- anti_join(k_products2, k_products)
+# create data frame of all added and removed data
+summary <- data.frame(
+  store = stores,
+  status = statuses,
+  apr2 = april2,
+  apr4 = april4,
+  apr10 = april10)
 
-#samez <- semi_join(z_products, z_products2)
-#removedz <- anti_join(z_products, z_products2)
-#addedz <- anti_join(z_products2, z_products)
+# create kable of data frame
+summary %>% 
+   knitr::kable(booktabs = T, linesep = "\\addlinespace", col.names = c("Store", " ", "April 2", "April 4", "April 10")) %>% 
+  column_spec(1:2, bold = T) %>% 
+  kable_styling(latex_options = "HOLD_position") %>% 
+  kable_styling(latex_options = "striped")
+```
 
+```{r}
+#| label: tbl-percent
+#| tbl-cap: "ZAFUL's percentage of additions and deprecations of products"
+#| echo: false
+#| message: false
+#| warning: false
+
+inc1 <- ((nrow(z_added))/(nrow(z_products)) * 100)
+inc2 <- ((nrow(z_added2_1))/(nrow(z_products2)) * 100)
+inc3 <- ((nrow(z_added2))/(nrow(z_products)) * 100)
+
+dec1 <- ((nrow(z_removed))/(nrow(z_products)) * 100)
+dec2 <- ((nrow(z_removed2_1))/(nrow(z_products2)) * 100)
+dec3 <- ((nrow(z_removed2))/(nrow(z_products)) * 100)
+
+percent <- data.frame(
+  status = c("Increase (+%)", "Decrease (-%)"),
+  apr2to4 = c(inc1, dec1),
+  apr2to10 = c(inc2, dec2),
+  apr4to10 = c(inc3, dec3)
+)
+
+percent %>% 
+  knitr::kable(booktabs = T, linesep = "\\addlinespace", col.names = c(" ", "April 2nd to 4th", "April 4th to 10th", "April 2nd to 10th")) %>% 
+  column_spec(1, bold = T) %>% 
+  kable_styling(latex_options = "HOLD_position")%>% 
+  kable_styling(latex_options = "striped")
+```
+
+```{r}
+#| label: fig-added
+#| fig-cap: "Total num of products seem consistent, but the proportion of added ones are large"
+#| echo: false
+#| message: false
+#| warning: false
+
+dates <- c("April 2", "April 4", "April 10")
+productss <- c(nrow(z_products), 
+               (nrow(z_products2) - nrow(z_added)), 
+               (nrow(z_products3) - nrow(z_added2)), as.integer(0), 
+               nrow(z_added), 
+               nrow(z_added2))
+
+added <- data.frame(
+  date = c(rep(dates, times = 2)),
+  add = c(rep("Same from Apr 2nd", times = 3), rep("Added", times = 3)),
+  products = productss
+)
+
+date = c("April 2", "April 4", "April 10")
+added$date <- factor(totals2$date, levels = date)
+
+added %>% 
+  ggplot(aes(x = date, y = products, fill = add)) +
+  geom_col() +
+  theme_minimal() +
+  labs(x = "Date", y = "Products", fill = "Added?") + 
+  theme(text=element_text(size=11, family="serif")) + 
+  scale_fill_brewer(palette = "Set1")
 ```
 
 # Discussion

@@ -67,3 +67,27 @@ for(page_result in seq(from = 1, to = 123, by = 1)) {
 
 #Write csv of product list
 write_csv(z_products2, "inputs/data/zafulapril4.csv")
+
+## Third date
+#Create empty data frame
+z_products3 <- data.frame()
+
+#Loop through all product pages (sequence max set by what is seen on site) 
+for(page_result in seq(from = 1, to = 125, by = 1)) {
+  url = paste0("https://www.zaful.com/clothes-e_1/g_", 
+               page_result, ".html")
+  raw_page <- GET(url, add_headers(headers))
+  html <- read_html(raw_page)
+  
+  # Scrape all product names on given page
+  products <- html %>% html_elements(".js_list_title") %>% html_text()
+  
+  # Add each page's products to data frame
+  z_products3 <- rbind(z_products3, data.frame(products=products))
+  
+  # Print page number to track progress, not necessary
+  print(paste("Page:", page_result))
+}
+
+#Write csv of product list
+write_csv(z_products3, "inputs/data/zafulapril10.csv")

@@ -1,5 +1,5 @@
 ---
-title: "Fast Fashion's Rapid Rate of Overproduction is Observedly Unsustainable & Unethical: Why and How did we get here?"
+title: "Fast Fashion's Rapid Rate of Production is Observedly Unsustainable & Unethical: Why and How did we get here?"
 author: "Jayden Jung"
 thanks: "Code and data are available at: https://github.com/jj-andj/fast-fashion-analysis"
 date: "April 21, 2023"
@@ -8,7 +8,7 @@ format:
   pdf: 
     documentclass: article
     geometry: margin = 1in
-    abstract: "Fast fashion is extremely profitable, accessible, and convienient, and equally -- if not more -- unethical and unsustainable. To illustrates the severity of fast fashion companies' rate of overproduction, this paper scrapes a representative company's online inventory at multiple points in time and finds that old products are being retired and new products added at unbelievably fast rates: too fast to be ethically possible. Secondary research explores this industry's cultural origins and catalysts and its serious negative ethical and environment consequences. Possible solutions are discussed, and the paper concludes on calling for urgent awareness and action to combat fast fashion."
+    abstract: "Fast fashion is extremely profitable, accessible, and convienient, and equally -- if not more -- unethical and unsustainable. To illustrate the severity of fast fashion companies' rapid rate of production, this paper scrapes a representative company's online inventory at multiple points in time and finds that old products are being retired and new products added in big amounts and at fast speeds: too big and fast to be ethically possible. Secondary research explores this industry's cultural origins and catalysts and its serious negative ethical and environment consequences. Possible solutions are discussed, and the paper concludes on calling for urgent awareness and action to combat fast fashion."
 output: 
   bookdown::pdf_document2
 toc: false
@@ -21,13 +21,13 @@ bibliography: references.bib
 
 > "Fast fashion isn't free. Someone, somewhere is paying."
 >
-> --- Lucy Siegle, Journalist and Producer of *The True Cost*, 2015.
+> --- Lucy Siegle, Journalist and Producer of *The True Cost* @citeTrueCost
 
-Fast fashion is the design, production, and selling of clothing in a very rapid and high volume approach. Companies participating in this practice churn out countless new, trendy products faster than ever at unbelievably cheap prices and even lower costs, reaping profit margins in the hundreds of millions and even billions. Customers are happy, finding it an accessible and affordable way to dress well and constantly update their closets. This situation may appear too good to be true: this is because it is.
+Fast fashion is the design, production, and selling of clothing in a very rapid and high volume approach [@citeGoodTrade]. Companies participating in this practice churn out countless new, trendy products faster than ever at unbelievably cheap prices and even lower costs, reaping profit margins in the hundreds of millions and even billions. Customers are happy, finding it an accessible and affordable way to dress well and constantly update their closets. This situation may appear too good to be true: this is because it is.
 
 As Lucy Siegle's quote suggests, fast fashion does come at a cost, though it may not be obvious. It is made possible only by riding on the backs of unethical labor conditions and catastrophically negative effects on the environment. Despite these truths, many continue to support and buy from fast fashion companies, often as they do not grasp the true severity of these issues or that they feel it is not something that can be challenged.
 
-This paper delves into a case study of the fast fashion company ZAFUL. By documenting all available products in one of ZAFUL's given categories through web scraping and comparing the data collected on different dates over time, we see first-hand the unbelievably fast rate of production and turnover. The extremity of these results are further emphasized when compared to the product retention rate of a sustainable fashion company, KOTN.
+This paper delves into a case study of the fast fashion company ZAFUL. By documenting all available products in one of ZAFUL's given categories through web scraping and comparing the data collected on different dates over time, we see first-hand the unbelievably fast rate of production and turnover. In one case, in about 1 week, ZAFUL added over 2,500 women's clothing products to their website, nearly a 35% increase (See @tbl-summary & @tbl-percent). The extremity of these results are further emphasized when compared to the product retention rate of a sustainable fashion company, KOTN, that, during the period of this paper's observation, did not add or remove any products.
 
 The paper then draws on secondary literature to convey how the illustrated severity of fast fashion companies' rapidness in production is inherently unethical and unsustainable, specifically by showcasing the negative consequences that are necessary to achieve those results. Consideration of the cultural origins and catalysts of the fast fashion industry are also provided. Then, discussion of possible solution spaces to these problems are explored, generally suggesting that fast fashion itself should be fought against.
 
@@ -37,17 +37,9 @@ The gathering of the data used for this paper was done by web scraping through t
 
 # Data
 
-talk about data collection process and category (women's clothing only)
+All data collected and used for this paper was proccurred through web scraping. Two e-commerce websites were chosen for this: ZAFUL (zaful.com), a fast fashion company, and KOTN (kotn.com), a sustainable, slow fashion company. For both, I restricted the collection to only the Women's Clothing category for better direct comparison and feasibility. Scraping of ZAFUL's products was conducted through `R` [@citeR], where the packages `rvest` [@citeVest] and `httr` [@citeHTTR] allowed me to loop through the pagination division of the products. To scrape for KOTN's products, I used the *Web Scraper* Chrome extension [@citeWS], which enabled me to work around the dynamic nature of this site loading in new products as you scroll.
 
-web scraper chrome extension for kotn (dynamic webpage)
-
-for looping through pagination for zaful
-
-only property we are using is product name
-
-differences/sameness were found by the exact product name so even the difference in colour or size mean they are diff products (this is a lil unfortunate)
-
-summarize total number of products seen before and after for two stores (table woahh)
+The only variable I collected was every product's exact name. This would enable me to compare the total list on different dates to identify the added and removed products. To accomplish this comparison, the scraping was conducted for both stores on three separate dates: April 2nd, April 4th, and April 10th. The resulting six data sets each only had the `products` property of a character class that held all the scraped product names from that store on that day. @tbl-head provides a preview of these data sets.
 
 ```{r}
 #| label: set-up
@@ -60,6 +52,7 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
 library(RColorBrewer)
+knitr::opts_chunk$set(fig.pos = "H")
 
 #Read in data
 z_products <- read_csv(here::here("inputs/data/zafulapril2.csv"), show_col_types = FALSE)
@@ -83,6 +76,33 @@ k_products3 <- k_products3[!duplicated(k_products3$products),]
 ```
 
 ```{r}
+#| label: tbl-head
+#| tbl-cap: "Preview of ZAFUL and KOTN products from April 2nd"
+#| echo: false
+#| message: false
+#| warning: false
+
+z_head <- head(z_products)
+k_head <- head(k_products)
+
+z_head %>% 
+  knitr::kable(booktabs = T, linesep = "\\addlinespace", col.names = c("ZAFUL Products")) %>% 
+  kable_styling(latex_options = "striped") %>% 
+  kable_styling(latex_options = "HOLD_position")
+
+k_head %>% 
+  knitr::kable(booktabs = T, linesep = "\\addlinespace", col.names = c("KOTN Products")) %>% 
+  kable_styling(latex_options = "striped") %>% 
+  kable_styling(latex_options = "HOLD_position")
+```
+
+\pagebreak
+
+One limitation of this was that, for ZAFUL's products, this would indicate that two products of the same name but differing colours or sizes would register as different products, while KOTN's wouldn't, entirely due to a difference in how the products were displayed on the respective sites. This was allowed, as the addition of more sizes and colours does require production efforts, but the analysis below was not adjusted to account for it. Another issue was that ZAFUL had some cases of duplicate product names showing up on different pages; the final data sets were cleaned to filter out any of these cases.
+
+@tbl-data summarizes the total number of recorded products for both stores on the three dates that they were recorded: April 2nd, April 4th, and April 10th, 2023. This table, coupled with @fig-data, reveals the sheer volume of ZAFUL's quantity of products compared to KOTN; ZAFUL approximates 7,300-7,500 products, while KOTN at 248. ZAFUL's Women's Clothing section has nearly thirty times as many products as KOTN's. Aside from this, though, these initial impressions do not reveal much. KOTN seems to have no fluctuation in product volume, while ZAFUL's seems to remain around similar values.
+
+```{r}
 #| label: tbl-data
 #| tbl-cap: "Total number of Women's Clothing products by store by date"
 #| echo: false
@@ -101,8 +121,8 @@ totals <- data.frame(
 totals %>% 
   knitr::kable(booktabs = T, linesep = "\\addlinespace", col.names = c("Store", "April 2", "April 4", "April 10")) %>% 
   column_spec(1, bold = T) %>% 
-  kable_styling(latex_options = "HOLD_position")%>% 
-  kable_styling(latex_options = "striped")
+  kable_styling(latex_options = "striped") %>% 
+  kable_styling(latex_options = "HOLD_position")
 
 ```
 
@@ -137,7 +157,11 @@ totals2 %>%
 
 ```
 
+\pagebreak
+
 # Results
+
+By comparing what character entries are in a latter data set and not the former, and what is in the former but not the latter, I was able to infer which products were newly added and which had been deprecated between the date ranges of the web scraping. @tbl-summary conveys this. This approach reveals much more information than the raw quantity of products at each date. Despite ZAFUL's total product quantity only changing by a relatively little amount, the actual number of products that are added and removed are much larger. From the 2nd to the 4th, there were only 80 more products overall, but that was the result of 1642 products being removed and 1702 products added. From 2nd to the 4th, there were 180 more products, but it is broken down into 2364 removed and 2544 added. Contrarily, KOTN's 248 products remain unchanged both in total quantity and exact composition over the entire time.
 
 ```{r}
 #| label: tbl-summary
@@ -230,6 +254,8 @@ summary %>%
   kable_styling(latex_options = "striped")
 ```
 
+@tbl-percent shows the percentage of the added and deprecated products between the three given date ranges (April 2-4, 4-10, and 2-10). This provides a clearer image of how large these values are on a relative level. From April 2nd to 4th, the added items were equivalent to 23% of the quantity of original products, nearly a quarter, which had been replaced in two days. April 2nd to 10th, the added items were equivalent to nearly 35% of the number of original ones, and the decreased items over 32%. This means that over a third of the 7319 products were replaced in eight days. This is illustrated also in @fig-added, where, within each total quantity of products by date, the added quantity is highlighted.
+
 ```{r}
 #| label: tbl-percent
 #| tbl-cap: "ZAFUL's percentage of additions and deprecations of products"
@@ -295,27 +321,39 @@ added %>%
 
 ## Findings
 
-Lorem
+This case of ZAFUL's observed rate of rapidly deprecating old products and adding new products in the span of just a few days or a week is a small snapshot of the fast fashion industry. It provides a practical illustration of how fast this industry operates. Today, the classic four-season-a-year model of fashion collections is a thing of the far past, and most major companies are producing at 52 "micro-seasons" per year, a new collection every week, or more, even thousands new items in a couple of days as we've seen in ZAFUL's case [@citeGoodTrade].
+
+The world, today, consumes around 80 billion new pieces of clothing every year, 400% more than we did 20 years ago [@citeTrueCost]. The sheer amount of clothing that is produced, at the speed that it is, brings up the question of why it happens and how it is even possible. These two questions are explored below.
 
 ## Why did we get here? Exploring culture-based roots of Fast Fashion
 
-Lorem
+Clothing, until the 1900s, was mostly made at home or specifically by individual experts: then, industrialization led to the popularization of factory-made clothes, which was both cheaper and more convenient [@citeOverdressed]. Following World War II, Americans procured began to actively follow fashion trends. In the 1970s, commercialization of clothes developed furthered, and department stores with even more inexpensive options became normalized. The concepts of a "good deal" and shopping around sales schedules originated from this period.
+
+The 1990s and 2000s marked the rise of fast fashion due to fierce competition between companies to outperform each other; frontliners like GAP, H&M, and Zara pioneered new ways of producing clothes at extremely fast speeds to actively meet ongoing fashion trends and stand out as the trendiest option to consumers [@citeOverdressed]. By forgoing quality, these companies were able to do this at the cheapest possible costs, and began earning record-high profit margins. Despite these clothes being cheaper per item for the consumer as well, it led them to shopping for more clothes more frequently, leading to more spending overall and higher revenue for the companies. This financial incentive drove companies to further actively embed fast fashion into culture, leading to a feedback loop of even more invested consumers expecting even faster turnaround of the most recent trends.
+
+Recent surveys find that a majority of teenagers (over 60%) buy clothes that they never wear, and even more that only wear it once, attributing it to the pressure they feel to stay trendy and not be seen wearing the same thing multiple times [@citeGiveUp].
 
 ## At what cost? Reviewing the ramifications of Fast Fashion
 
-Lorem
+The fast fashion industry has extreme ethical and environmental consequences. To match the demands of fast fashion companies' requirement for lead time and production speed, the labourers at the lowest tiers suffer greatly. Many work endless hours in unsafe, inhumane conditions, with unlivable salaries [@citeTrueCost]. Bangladeshi garment workers are beaten by their employers if they do not meet quotas, and some Cambodian ones have been shot by the police for protesting the working conditions [@citeTrueCost]. This industry also depends on the use of child labourers. Some consumers of major brands like SHEIN and ZARA have reported seeing pleading messages like "HELP" being written onto their clothes, presumably by such workers [@citeGiveUp].
 
-## Defining Solution Spaces
+The garment industry is a major driver of pollution and climate change. Garment production currently produces 92 million tonnes of waste and uses up 79 trillion litres of water every year, and produces 10% of the world's CO2 emissions [@citeEnvPrice]. Beyond production, 85% of textiles go to the dump [@citeEnvImpact]. Of the clothing that does get donated, only 20% is actually resold, and the rest are also dumped [@citeTrueCost].
 
-Lorem
+## Stepping towards a Solution by Better Understanding that one is needed 
+
+A major blockade to pursuing solutions to the issues resulting from fast fashion is that there is still a major lack of social consciousness around the topic. This paper, in exploring the specific case of ZAFUL's rate of production and communicating impressionable, ridiculous statistics on its scale, is one example of what an intermediary step to accommodate this should look like: spreading practical awareness and sparking a degree of outrage.
+
+Despite younger generations like Gen Z reportedly advocating against fast fashion and in favor of sustainability when the topics are discussed directly [@citeGiveUp] [@citeFallApart], as mentioned before, their actions do not reflect these sentiments, as they continue to purchase from fast fashion brands without feeling conscious guilt. There is a feeling of disconnect between individual choice and real, macro-level consequences of fast fashion. There are also some defenders of such actions that claim that fast fashion is the only affordable and accessible option for some [@citeGiveUp].
+
+Making the alternative, sustainable, slow fashion, as seen in companies like KOTN could very much help with this issue [@citeFallApart]. But it must be done in tandem with aggressive moralization of fast fashion as an undeniably unethical, unsustainable, wrong thing to partake in.
 
 ## Future Research
 
-Lorem
+A larger scale, more robust approach taken to this paper's attempt to document the rate of production of fast fashion companies could be conducted to better accomplish the goal of inciting public concern for the current state of this industry. Though some information exists and ball-park guesses can be made, there is currently no reliable source of exactly how much harm each of these fast fashion companies are causing. Without a tangible point of wrongness, it is difficult for individuals to find reason with changing the status quo. Beyond that, better exploration and public understanding of what actions individuals can take to fight against fast fashion would likely help people redirect their helplessness.
 
 ## Limitations
 
-Lorem
+Other than the shortcomings addressed throughout the paper, this project generally operated on a very limited scale, only showing snippets of a single company's actions over a time span of barely over a week. Though this may be seen as a limitation in one regard due to the absolute lack of actual generalizableness, I ask that it is also thought of as a calling to reveal more. If a paper done at such a small scale shows as shocking of results as it has, then one conducted robustly must reveal even more criminalizing results of the industry.
 
 \clearpage
 
